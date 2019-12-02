@@ -6,7 +6,7 @@
   <artifactId>twut</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Tweet Archive Unleashed Toolkit</name>
+  <name>Tweet Archives Unleashed Toolkit</name>
   <description>An open-source toolkit for analyzing line-oriented JSON Twitter archives.</description>
   <url>https://github.com/archivesunleashed/twut</url>
   <inceptionYear>2019</inceptionYear>

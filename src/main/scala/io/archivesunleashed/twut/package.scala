@@ -23,23 +23,45 @@ import org.apache.spark.sql.DataFrame
   */
 package object twut {
 
+  /** Creates a DataFrame of Tweet IDs.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return a single-column DataFrame containing Twitter IDs.
+   */
   def ids(tweets: DataFrame): DataFrame = {
     tweets.select(
       "id_str"
     )
   }
 
+  /** Creates a DataFrame of Twitter User Info.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return a multi-column DataFrame containing Twitter user info.
+   */
   def userInfo(tweets: DataFrame): DataFrame = {
     tweets.select(
-      "user.id_str",
-      "user.name",
-      "user.screen_name",
-      "user.verified",
-      "user.location",
-      "user.statuses_count",
+      "user.favourites_count",
       "user.followers_count",
       "user.friends_count",
-      "user.favourites_count"
+      "user.id_str",
+      "user.location",
+      "user.name",
+      "user.screen_name",
+      "user.statuses_count",
+      "user.verified"
+    )
+  }
+
+  /** Creates a DataFame of tweeted urls.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return a multi-column DataFrame containing urls.
+   */
+  def urls(tweets: DataFrame): DataFrame = {
+    tweets.select(
+      "entities.urls.expanded_url",
+      "entities.urls.url"
     )
   }
 }
