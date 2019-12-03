@@ -16,6 +16,7 @@
 
 package io
 
+import scala.util.Try
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
 
@@ -23,6 +24,14 @@ import org.apache.spark.sql.DataFrame
   * Package object which supplies implicits to augment generic DataFrames with twut-specific transformations.
   */
 package object archivesunleashed {
+
+  /** Checks to see if a column exists.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return boolean.
+   */
+  def hasColumn(tweets: DataFrame, column: String) = Try(tweets(column)).isSuccess
+
   /** Creates a DataFrame of Tweet IDs.
    *
    * @param tweets DataFrame of line-oriented Twitter JSON
@@ -53,15 +62,32 @@ package object archivesunleashed {
     )
   }
 
-  /** Creates a DataFame of tweeted urls.
+  /** Creates a DataFrame of Tweet text.
    *
    * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a multi-column DataFrame containing urls.
+   * @return a two columns (text, and full-text) containing Tweet text.
    */
-  def urls(tweets: DataFrame): DataFrame = {
+  def text(tweets: DataFrame): DataFrame = {
+    if (hasColumn(tweets, "full_text") == true) {
+      tweets.select(
+        "full_text",
+        "text"
+      )
+    } else {
+      tweets.select(
+        "text"
+      )
+    }
+  }
+
+  /** Creates a DataFrame of Tweet times.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return a single-column DataFrame containing UTC Tweet times.
+   */
+  def times(tweets: DataFrame): DataFrame = {
     tweets.select(
-      "entities.urls.expanded_url",
-      "entities.urls.url"
+      "created_at"
     )
   }
 }

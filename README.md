@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/archivesunleashed/twut.svg?branch=master)](https://travis-ci.org/archivesunleashed/twut)
 [![codecov](https://codecov.io/gh/archivesunleashed/twut/branch/master/graph/badge.svg)](https://codecov.io/gh/archivesunleashed/twut)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut)
-[![Javadoc](https://javadoc-badge.appspot.com/io.archivesunleashed/twut.svg?label=javadoc)](http://api.docs.archivesunleashed.io/0.18.0/apidocs/index.html)
 [![Scaladoc](https://javadoc-badge.appspot.com/io.archivesunleashed/twut.svg?label=scaladoc)](http://api.docs.archivesunleashed.io/0.18.0/scaladocs/index.html)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Contribution Guidelines](http://img.shields.io/badge/CONTRIBUTING-Guidelines-blue.svg)](./CONTRIBUTING.md)
@@ -46,8 +45,8 @@ Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_222)
 Type in expressions to have them evaluated.
 Type :help for more information.
 
-scala> import io.archivesunleashed.twut._
-import io.archivesunleashed.twut._
+scala> import io.archivesunleashed._
+import io.archivesunleashed._
 
 scala> val tweets = "/home/nruest/Projects/au/twut/src/test/resources/10-sample.jsonl"
 tweets: String = /home/nruest/Projects/au/twut/src/test/resources/10-sample.jsonl
@@ -56,7 +55,7 @@ scala> val tweetsDF = spark.read.json(tweets)
 19/12/02 13:38:51 WARN package: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
 tweetsDF: org.apache.spark.sql.DataFrame = [contributors: string, coordinates: string ... 33 more fields]
 
-scala> twut.ids(tweetsDF).show
+scala> ids(tweetsDF).show
 +-------------------+
 |             id_str|
 +-------------------+

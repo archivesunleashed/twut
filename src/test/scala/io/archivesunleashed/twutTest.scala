@@ -39,6 +39,20 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     sc = new SparkContext(conf)
   }
 
+  test("Column check") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(tweets)
+
+    val hasFullText = hasColumn(tweetsDF, "full_text")
+    val hasText = hasColumn(tweetsDF, "text")
+
+    assert(hasFullText == false)
+    assert(hasText == true)
+  }
+
   test("ID Extraction") {
     val spark = SparkSession.builder().master("local").getOrCreate()
     // scalastyle:off
@@ -74,8 +88,43 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     assert("イサオ(^^)最近ディスクにハマル🎵" == userInfoTest(0).get(5))
     assert("isao777sp2" == userInfoTest(0).get(6))
     assert(2137 == userInfoTest(0).get(7))
+    // scalastyle:off
     assert(false == userInfoTest(0).get(8))
+    // scalastyle:on
   }
+
+  test("Text Extraction") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(tweets)
+
+    val textTest = text(tweetsDF)
+      .head(3)
+    assert(textTest.size == 3)
+    assert("Baket ang pogi mo???" == textTest(0).get(0))
+    assert("今日すげぇな！#安元江口と夜あそび" == textTest(1).get(0))
+    assert("@flower_1901 عسى الله يوفقنا 🙏🏻" == textTest(2).get(0))
+  }
+
+  test("Times Extraction") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(tweets)
+
+    val timesTest = times(tweetsDF)
+      .head(5)
+    assert(timesTest.size == 5)
+    assert("Mon Dec 02 14:16:05 +0000 2019" == timesTest(0).get(0))
+    assert("Mon Dec 02 14:16:05 +0000 2019" == timesTest(1).get(0))
+    assert("Mon Dec 02 14:16:05 +0000 2019" == timesTest(2).get(0))
+    assert("Mon Dec 02 14:16:05 +0000 2019" == timesTest(3).get(0))
+    assert("Mon Dec 02 14:16:05 +0000 2019" == timesTest(4).get(0))
+  }
+
 
   after {
     if (sc != null) {

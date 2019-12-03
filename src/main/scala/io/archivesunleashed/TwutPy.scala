@@ -21,7 +21,7 @@ import org.apache.spark.sql.DataFrame
 
 class TwutPy(sc: SparkContext) {
 
-  /** Creates a DataFrame of Tweet IDs. **/
+  /** Creates a DataFrame of Tweet IDs. */
   def ids(tweets: DataFrame): DataFrame = {
     ids(tweets)
   }
@@ -31,8 +31,13 @@ class TwutPy(sc: SparkContext) {
     userInfo(tweets)
   }
 
-  /** Creates a DataFame of tweeted urls. */
-  def urls(tweets: DataFrame): DataFrame = {
-    urls(tweets)
+  /** Creates a DataFame of tweet text. */
+  def text(tweets: DataFrame): DataFrame = {
+    text(tweets)
+  }
+
+  /** Creates a DataFrame of tweet times. */
+  def times(tweets: DataFrame): DataFrame = {
+    times(tweets)
   }
 }
