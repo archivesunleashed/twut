@@ -43,8 +43,6 @@
     <surefire.plugin.version>2.22.0</surefire.plugin.version>
     <jacoco.plugin.version>0.8.4</jacoco.plugin.version>
     <versions.plugin.version>2.1</versions.plugin.version>
-    <tika.version>1.22</tika.version>
-    <jackson.version>2.10.0</jackson.version>
   </properties>
 
   <licenses>
@@ -479,31 +477,6 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_${scala.binary.version}</artifactId>
       <version>${spark.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.7.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.rogach</groupId>
-      <artifactId>scallop_${scala.binary.version}</artifactId>
-      <version>3.3.1</version>
-    </dependency>
-    <dependency>  <!-- Needed for running boilerpipe, but will compile without. -->
-      <groupId>com.syncthemall</groupId>
-      <artifactId>boilerpipe</artifactId>
-      <version>1.2.2</version>
-    </dependency>
-    <dependency>  <!-- Needed for running boilerpipe. -->
-      <groupId>xerces</groupId>
-      <artifactId>xercesImpl</artifactId>
-      <version>2.12.0</version>
-    </dependency>
-    <dependency>
-      <groupId>tl.lin</groupId>
-      <artifactId>lintools-datatypes</artifactId>
-      <version>1.1.1</version>
     </dependency>
   </dependencies>
 

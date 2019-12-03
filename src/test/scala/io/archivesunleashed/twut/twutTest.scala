@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.archivesunleashed.twut
+package io.archivesunleashed
 
 import com.google.common.io.Resources
 import org.apache.spark.sql.SparkSession
@@ -46,14 +46,13 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val ids = twut
-      .ids(tweetsDF)
+    val idsTest = ids(tweetsDF)
       .orderBy(desc("id_str"))
       .head(3)
-    assert(ids.size == 3)
-    assert("1201505319286984705" == ids(0).get(0))
-    assert("1201505319286755328" == ids(1).get(0))
-    assert("1201505319282565121" == ids(2).get(0))
+    assert(idsTest.size == 3)
+    assert("1201505319286984705" == idsTest(0).get(0))
+    assert("1201505319286755328" == idsTest(1).get(0))
+    assert("1201505319282565121" == idsTest(2).get(0))
   }
 
   test("User Info Extraction") {
@@ -63,20 +62,19 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val userInfo = twut
-      .userInfo(tweetsDF)
+    val userInfoTest = userInfo(tweetsDF)
       .orderBy(desc("id_str"))
       .head(1)
-    assert(userInfo.size == 1)
-    assert(2331 == userInfo(0).get(0))
-    assert(91 == userInfo(0).get(1))
-    assert(83 == userInfo(0).get(2))
-    assert("973424490934714368" == userInfo(0).get(3))
-    assert("日本 山口" == userInfo(0).get(4))
-    assert("イサオ(^^)最近ディスクにハマル🎵" == userInfo(0).get(5))
-    assert("isao777sp2" == userInfo(0).get(6))
-    assert(2137 == userInfo(0).get(7))
-    assert(false == userInfo(0).get(8))
+    assert(userInfoTest.size == 1)
+    assert(2331 == userInfoTest(0).get(0))
+    assert(91 == userInfoTest(0).get(1))
+    assert(83 == userInfoTest(0).get(2))
+    assert("973424490934714368" == userInfoTest(0).get(3))
+    assert("日本 山口" == userInfoTest(0).get(4))
+    assert("イサオ(^^)最近ディスクにハマル🎵" == userInfoTest(0).get(5))
+    assert("isao777sp2" == userInfoTest(0).get(6))
+    assert(2137 == userInfoTest(0).get(7))
+    assert(false == userInfoTest(0).get(8))
   }
 
   after {

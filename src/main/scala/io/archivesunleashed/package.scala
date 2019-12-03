@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package io.archivesunleashed.twut
+package io
 
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
 
 /**
   * Package object which supplies implicits to augment generic DataFrames with twut-specific transformations.
   */
-package object twut {
-
+package object archivesunleashed {
   /** Creates a DataFrame of Tweet IDs.
    *
    * @param tweets DataFrame of line-oriented Twitter JSON
