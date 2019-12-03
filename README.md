@@ -42,7 +42,7 @@ scala>
 
 ## Documentation! Or, how do I use this?
 
-Once built or downloaded, you can follow the basic set of recipes and tutorials [here](https://github.com/archivesunleashed/twut/wiki/).
+Once built or downloaded, you can follow the basic set of recipes and tutorials [here](https://github.com/archivesunleashed/twut/tree/master/docs).
 
 # License
 
