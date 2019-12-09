@@ -221,4 +221,35 @@ package object archivesunleashed {
 
   image_urls.union(video_urls.union(animated_gif_urls))
   }
+
+  /** Creates a DataFrame that filters out sensitives tweets.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return original DataFrame with sensitive tweets removed.
+   */
+  def removeSensitive(tweets: DataFrame): DataFrame = {
+    tweets.filter(
+      col("possibly_sensitive").isNull)
+        .filter(col("retweeted_status.possibly_sensitive").isNull)
+  }
+
+  /** Creates a DataFrame that filters out retweets.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return original DataFrame with retweets removed.
+   */
+  def removeRetweets(tweets: DataFrame): DataFrame = {
+    tweets.filter(
+      col("retweeted_status").isNull)
+  }
+
+  /** Creates a DataFrame that filters out tweets from non-verified users.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return original DataFrame with non-verified users' tweets removed.
+   */
+  def removeNonVerified(tweets: DataFrame): DataFrame = {
+    tweets.filter(
+      col("user.verified") === true)
+  }
 }

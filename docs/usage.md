@@ -13,6 +13,10 @@
 - [Extract image urls](usage.md#extract-image-urls)
 - [Extract media urls](usage.md#extract-media-urls)
 - [Extract video urls](usage.md#extract-video-urls)
+- [Remove sensitive tweets](usage.md#remove-sensitive-tweets)
+- [Remove retweets](usage.md#remove-retweets)
+- [Remove sensitive tweets](usage.md#remove-sensitive-tweets)
+- [Remove non-verified user tweets](usage.md#remove-non-verified-user-tweets)
 - [Work with DataFrame Results](usage.md#work-with-dataframe-results)
 
 ## Extract Tweet IDs
@@ -307,6 +311,61 @@ videoUrls(tweetsDF).show(5, false)
 ### Python DF
 
 **TODO**
+
+## Remove Sensitive Tweets
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+removeSensitive(tweetsDF).count
+res0: Long = 246
+```
+
+### Python DF
+
+**TODO**
+
+## Remove Retweets
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+removeRetweets(tweetsDF).count
+res0: Long = 230
+```
+
+### Python DF
+
+**TODO**
+
+## Remove Non-verified User Tweets
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+removeNonVerified(tweetsDF).count
+res0: Long = 5
+```
+
+### Python DF
+
+**TODO**
+
 
 ## Work with DataFrame Results
 

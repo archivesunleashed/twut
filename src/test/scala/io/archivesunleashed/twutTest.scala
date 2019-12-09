@@ -230,6 +230,45 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     assert("https://pbs.twimg.com/media/EKx9va5XUAEKcry.jpg" == mediaUrlsTest(2).get(0))
   }
 
+  test("Remove Sensistive Tweets") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(bigTweets)
+
+    val removeSensitiveTest = removeSensitive(tweetsDF)
+
+    assert(tweetsDF.count == 500)
+    assert(removeSensitiveTest.count == 246)
+  }
+
+  test("Remove Retweets") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(bigTweets)
+
+    val removeRetweetsTest = removeRetweets(tweetsDF)
+
+    assert(tweetsDF.count == 500)
+    assert(removeRetweetsTest.count == 230)
+  }
+
+  test("Remove non-verified user tweets") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(bigTweets)
+
+    val removeNonVerifiedTest = removeNonVerified(tweetsDF)
+
+    assert(tweetsDF.count == 500)
+    assert(removeNonVerifiedTest.count == 5)
+  }
+
   after {
     if (sc != null) {
       sc.stop()
