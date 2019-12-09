@@ -6,6 +6,13 @@
 - [Extract user information](usage.md#extract-user-information)
 - [Extract tweet text](usage.md#extract-tweet-text)
 - [Extract tweet times](usage.md#extract-tweet-times)
+- [Extract tweet sources](usage.md#extract-tweet-sources)
+- [Extract hashtags](usage.md#extract-hashtags)
+- [Extract urls](usage.md#extract-urls)
+- [Extract animated gif urls](usage.md#extract-animated-gif-urls)
+- [Extract image urls](usage.md#extract-image-urls)
+- [Extract media urls](usage.md#extract-media-urls)
+- [Extract video urls](usage.md#extract-video-urls)
 - [Work with DataFrame Results](usage.md#work-with-dataframe-results)
 
 ## Extract Tweet IDs
@@ -19,6 +26,7 @@ import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
+
 ids(tweetsDF).show(2, false)
 
 +-------------------+
@@ -45,6 +53,7 @@ import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
+
 userInfo(tweetsDF).show(2, false)
 
 +----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
@@ -71,6 +80,7 @@ import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
+
 text(tweetsDF).show(2, false)
 
 +---------------------------------+
@@ -97,6 +107,7 @@ import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
+
 times(tweetsDF).show(2, false)
 
 +------------------------------+
@@ -106,6 +117,191 @@ times(tweetsDF).show(2, false)
 |Mon Dec 02 14:16:05 +0000 2019|
 +------------------------------+
 only showing top 2 rows
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Tweet Sources
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/10-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+sources(tweetsDF).show(10, false)
+
++------------------------------------------------------------------------------------+
+|source                                                                              |
++------------------------------------------------------------------------------------+
+|<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>|
+|<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>|
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>             |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>|
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
++------------------------------------------------------------------------------------+
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Hashtags
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/10-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+hashtags(tweetsDF).show
+
++------------------+
+|          hashtags|
++------------------+
+|安元江口と夜あそび|
++------------------+
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Urls
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/10-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+urls(tweetsDF).show(10, false)
+
++-----------------------------------------------------------+
+|url                                                        |
++-----------------------------------------------------------+
+|https://t.co/hONLvNozJg                                    |
+|https://twitter.com/komsakaddams/status/1198868305668296705|
++-----------------------------------------------------------+
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Animated Gif Urls
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+animatedGifUrls(tweetsDF).show(10, false)
+
++-----------------------------------------------------------+
+|animated_gif_url                                           |
++-----------------------------------------------------------+
+|https://pbs.twimg.com/tweet_video_thumb/EKyat33U4AEpVFf.jpg|
+|https://pbs.twimg.com/tweet_video_thumb/EKyQ1fAU8AM7r1I.jpg|
+|https://pbs.twimg.com/tweet_video_thumb/EKyau1OU8AAD_OZ.jpg|
++-----------------------------------------------------------+
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Image Urls
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+imageUrls(tweetsDF).show(10, false)
+
++-----------------------------------------------+
+|image_url                                      |
++-----------------------------------------------+
+|https://pbs.twimg.com/media/EKjNNRFXsAANHyQ.jpg|
+|https://pbs.twimg.com/media/EKvWq8LXsAE_HhV.jpg|
+|https://pbs.twimg.com/media/EKx9va5XUAEKcry.jpg|
+|https://pbs.twimg.com/media/EKyNK0-WoAMDou3.jpg|
+|https://pbs.twimg.com/media/EKyHOyZVUAE3GX6.jpg|
++-----------------------------------------------+
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Media Urls
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+mediaUrls(tweetsDF).show(5, false)
+
++-----------------------------------------------+
+|image_url                                      |
++-----------------------------------------------+
+|https://pbs.twimg.com/media/EKjNNRFXsAANHyQ.jpg|
+|https://pbs.twimg.com/media/EKvWq8LXsAE_HhV.jpg|
+|https://pbs.twimg.com/media/EKx9va5XUAEKcry.jpg|
+|https://pbs.twimg.com/media/EKyNK0-WoAMDou3.jpg|
+|https://pbs.twimg.com/media/EKyHOyZVUAE3GX6.jpg|
++-----------------------------------------------+
+```
+
+### Python DF
+
+**TODO**
+
+## Extract Video Urls
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/500-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+videoUrls(tweetsDF).show(5, false)
+
++---------------------------------------------------------------------------------------------------+
+|video_url                                                                                          |
++---------------------------------------------------------------------------------------------------+
+|https://video.twimg.com/ext_tw_video/1201113203125583872/pu/pl/mLQJE9rIBSE6DaQ_.m3u8?tag=10        |
+|https://video.twimg.com/ext_tw_video/1201113203125583872/pu/vid/460x258/o5wbkNtC_yVBiGvM.mp4?tag=10|
+|https://video.twimg.com/ext_tw_video/1200729524045901825/pu/pl/1LRDIgIbWofMDpOa.m3u8?tag=10        |
+|https://video.twimg.com/ext_tw_video/1200729524045901825/pu/vid/360x638/KrMl6qgy_8ugHBW-.mp4?tag=10|
+|https://video.twimg.com/ext_tw_video/1200729524045901825/pu/vid/320x568/lMOyqZH6fnCoDGzI.mp4?tag=10|
++---------------------------------------------------------------------------------------------------+
 ```
 
 ### Python DF
