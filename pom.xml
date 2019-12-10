@@ -150,6 +150,18 @@
               <goal>testCompile</goal>
             </goals>
           </execution>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>doc-jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+          </execution>
         </executions>
         <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
@@ -247,66 +259,6 @@
             <goals>
               <goal>check</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- So we can release twut. -->
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>${release.plugin.version}</version>
-        <configuration>
-          <!-- see http://jira.codehaus.org/browse/MRELEASE-424 -->
-          <mavenExecutorId>forked-path</mavenExecutorId>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.scm</groupId>
-            <artifactId>maven-scm-provider-gitexe</artifactId>
-            <version>${scm-provider-gitexe.plugin.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <!-- GitHub Pages -->
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>${deploy.plugin.version}</version>
-      </plugin>
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>${site.plugin.version}</version>
-        <configuration>
-          <skipDeploy>true</skipDeploy>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <!-- Allows markdown syntax for site generation. To use it
-                 place files below src/site/markdown/[filename].md -->
-            <groupId>org.apache.maven.doxia</groupId>
-            <artifactId>doxia-module-markdown</artifactId>
-            <version>${doxia-markdown.plugin.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <version>${github-site.plugin.version}</version>
-        <configuration>
-          <message>Creating site for ${project.artifactId}, ${project.version}</message>
-          <path>${project.distributionManagement.site.url}</path>
-          <merge>true</merge>
-          <excludes>
-            <exclude>xref-test/**</exclude>
-            <exclude>testapidocs/**</exclude>
-          </excludes>
-        </configuration>
-        <executions>
-          <execution>
-            <id>github</id>
-            <goals>
-              <goal>site</goal>
-            </goals>
-            <phase>site-deploy</phase>
           </execution>
         </executions>
       </plugin>

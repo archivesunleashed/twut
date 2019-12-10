@@ -20,7 +20,7 @@ before_install:
 
 script:
  - mvn install -B -V
- - mvn site
+ - mvn javadoc:jar
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
