@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/archivesunleashed/twut.svg?branch=master)](https://travis-ci.org/archivesunleashed/twut)
 [![codecov](https://codecov.io/gh/archivesunleashed/twut/branch/master/graph/badge.svg)](https://codecov.io/gh/archivesunleashed/twut)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Contribution Guidelines](http://img.shields.io/badge/CONTRIBUTING-Guidelines-blue.svg)](./CONTRIBUTING.md)
 
@@ -10,39 +11,46 @@ An open-source toolkit for analyzing line-oriented JSON Twitter archives with Ap
 ## Dependencies
 
 - Java 8 or 11
+- Python 3
 - [Apache Spark](https://spark.apache.org/downloads.html)
 
 ## Getting Started
 
-Until we have a release, you'll need to clone the repo, build it, and pass the jar to Apache Spark.
+### Packages
 
-```shell
+#### Spark Shell
 
-$ git clone https://github.com/archivesunleashed/twut.git
-$ cd twut
-$ mvn clean install
-$ /path/to/spark/bin/spark-shell --jars /path/to/twut-0.0.1-SNAPSHOT-fatjar.jar"
+```
+$ spark-shell --packages "io.archivesunleashed:twut:0.0.2"
+```
 
-Spark context Web UI available at http://10.0.1.44:4040
-Spark context available as 'sc' (master = local[*], app id = local-1575383157031).
-Spark session available as 'spark'.
-Welcome to
-      ____              __
-     / __/__  ___ _____/ /__
-    _\ \/ _ \/ _ `/ __/  '_/
-   /___/ .__/\_,_/_/ /_/\_\   version 3.0.0-preview
-      /_/
+#### PySpark
 
-Using Scala version 2.12.10 (OpenJDK 64-Bit Server VM, Java 1.8.0_222)
-Type in expressions to have them evaluated.
-Type :help for more information.
+```
+$ pyspark --py-files /path/to/twut.zip --packages "io.archivesunleashed:twut:0.0.2"
+```
 
-scala>
+You will need the `PYSPARK_PYTHON` and `PYSPARK_DRIVER_PYTHON` environment variables set.
+
+### Jars
+
+You can download the [latest release files here](https://github.com/archivesunleashed/twut/releases) and include it like so:
+
+#### Spark Shell
+
+```
+$ spark-shell --jars /path/to/twut-0.0.2-fatjar.jar
+```
+
+#### PySpark
+
+```
+$ pyspark --py-files /path/to/twut.zip --driver-class-path /path/to/twut-0.0.2-fatjar.jar --jars /path/to/twut-0.0.2-fatjar.jar
 ```
 
 ## Documentation! Or, how do I use this?
 
-Once built or downloaded, you can follow the basic set of recipes and tutorials [here](https://github.com/archivesunleashed/twut/tree/master/docs).
+Once built or downloaded, you can follow the basic set of recipes and tutorials [here](https://github.com/archivesunleashed/twut/tree/master/docs/usage.md).
 
 # License
 

@@ -32,14 +32,16 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 ids(tweetsDF).show(2, false)
+```
 
+**Output**:
+```
 +-------------------+
 |id_str             |
 +-------------------+
 |1201505319257403392|
 |1201505319282565121|
 +-------------------+
-only showing top 2 rows
 ```
 
 ### Python DF
@@ -51,7 +53,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.ids(df).show(2, False)
+```
 
+**Output**:
+```
 +-------------------+
 |id_str             |
 +-------------------+
@@ -72,7 +77,10 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 userInfo(tweetsDF).show(2, false)
+```
 
+**Output**:
+```
 +----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
 |favourites_count|followers_count|friends_count|id_str             |location|name               |screen_name |statuses_count|verified|
 +----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
@@ -91,7 +99,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.userInfo(df).show(2, False)
+```
 
+**Output**:
+```
 +----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
 |favourites_count|followers_count|friends_count|id_str             |location|name               |screen_name |statuses_count|verified|
 +----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
@@ -112,7 +123,10 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 text(tweetsDF).show(2, false)
+```
 
+**Output**:
+```
 +---------------------------------+
 |text                             |
 +---------------------------------+
@@ -130,7 +144,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.text(df).show(2, False)
+```
 
+**Output**:
+```
 +---------------------------------+
 |text                             |
 +---------------------------------+
@@ -152,7 +169,10 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 times(tweetsDF).show(2, false)
+```
 
+**Output**:
+```
 +------------------------------+
 |created_at                    |
 +------------------------------+
@@ -171,7 +191,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.times(df).show(2, False)
+```
 
+**Output**:
+```
 +------------------------------+
 |created_at                    |
 +------------------------------+
@@ -193,7 +216,10 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 sources(tweetsDF).show(10, false)
+```
 
+**Output**:
+```
 +------------------------------------------------------------------------------------+
 |source                                                                              |
 +------------------------------------------------------------------------------------+
@@ -219,7 +245,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.sources(df).show(10, False)
+```
 
+**Output**:
+```
 +------------------------------------------------------------------------------------+
 |source                                                                              |
 +------------------------------------------------------------------------------------+
@@ -249,7 +278,10 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 hashtags(tweetsDF).show
+```
 
+**Output**:
+```
 +------------------+
 |          hashtags|
 +------------------+
@@ -266,7 +298,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.hashtags(df).show()
+```
 
+**Output**:
+```
 +------------------+
 |          hashtags|
 +------------------+
@@ -287,7 +322,10 @@ val tweets = "src/test/resources/10-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 urls(tweetsDF).show(10, false)
+```
 
+**Output**:
+```
 +-----------------------------------------------------------+
 |url                                                        |
 +-----------------------------------------------------------+
@@ -305,7 +343,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.urls(df).show(10, False)
+```
 
+**Output**:
+```
 +-----------------------+
 |url                    |
 +-----------------------+
@@ -335,7 +376,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 animatedGifUrls(tweetsDF).show(10, false)
+```
 
+**Output**:
+```
 +-----------------------------------------------------------+
 |animated_gif_url                                           |
 +-----------------------------------------------------------+
@@ -354,7 +398,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.animatedGifUrls(df).show(10, False)
+```
 
+**Output**:
+```
 +-----------------------------------------------------------+
 |animated_gif_url                                           |
 +-----------------------------------------------------------+
@@ -377,7 +424,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 imageUrls(tweetsDF).show(5, false)
+```
 
+**Output**:
+```
 +-----------------------------------------------+
 |image_url                                      |
 +-----------------------------------------------+
@@ -398,7 +448,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.imageUrls(df).show(5, False)
+```
 
+**Output**:
+```
 +-----------------------------------------------+
 |image_url                                      |
 +-----------------------------------------------+
@@ -421,7 +474,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 mediaUrls(tweetsDF).show(5, false)
+```
 
+**Output**:
+```
 +-----------------------------------------------+
 |image_url                                      |
 +-----------------------------------------------+
@@ -442,7 +498,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.mediaUrls(df).show(5, False)
+```
 
+**Output**:
+```
 +-----------------------------------------------+
 |image_url                                      |
 +-----------------------------------------------+
@@ -467,7 +526,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 videoUrls(tweetsDF).show(5, false)
+```
 
+**Output**:
+```
 +---------------------------------------------------------------------------------------------------+
 |video_url                                                                                          |
 +---------------------------------------------------------------------------------------------------+
@@ -488,7 +550,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 SelectTweet.videoUrls(df).show(5, False)
+```
 
+**Output**:
+```
 +---------------------------------------------------------------------------------------------------+
 |video_url                                                                                          |
 +---------------------------------------------------------------------------------------------------+
@@ -513,6 +578,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 removeSensitive(tweetsDF).count
+```
+
+**Output**:
+```
 res0: Long = 246
 ```
 
@@ -525,6 +594,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 FilterTweet.removeSensitive(df).count()
+```
+
+**Output**:
+```
 246
 ```
 
@@ -541,6 +614,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 removeRetweets(tweetsDF).count
+```
+
+**Output**:
+```
 res0: Long = 230
 ```
 
@@ -553,6 +630,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 FilterTweet.removeRetweets(df).count()
+```
+
+**Output**:
+```
 230
 ```
 
@@ -569,6 +650,10 @@ val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
 removeNonVerified(tweetsDF).count
+```
+
+**Output**:
+```
 res0: Long = 5
 ```
 
@@ -581,6 +666,10 @@ path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
 FilterTweet.removeNonVerified(df).count()
+```
+
+**Output**:
+```
 5
 ```
 
