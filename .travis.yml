@@ -20,6 +20,7 @@ before_install:
 
 script:
  - mvn install -B -V
+ - mvn site
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
