@@ -44,8 +44,21 @@ only showing top 2 rows
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
 
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.ids(df).show(2, False)
+
++-------------------+
+|id_str             |
++-------------------+
+|1201505319257403392|
+|1201505319282565121|
++-------------------+
+```
 ## Extract User Information
 
 Multi-column DataFrame containing the following columns: `favourites_count`, `followers_count`, `friends_count`, `id_str`, `location`, `name`, `screen_name`, `statuses_count`, and `verified`.
@@ -71,11 +84,24 @@ only showing top 2 rows
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
 
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.userInfo(df).show(2, False)
+
++----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
+|favourites_count|followers_count|friends_count|id_str             |location|name               |screen_name |statuses_count|verified|
++----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
+|8302            |101            |133          |1027887558032732161|nct🌱   |车美               |M_chemei    |3720          |false   |
+|2552            |73             |218          |2548066344         |null    |ひーこ☆禿げても愛せ|heeko_gr_029|15830         |false   |
++----------------+---------------+-------------+-------------------+--------+-------------------+------------+--------------+--------+
+```
 ## Extract Tweet Text
 
-Multi-column DataFrame containing the following columns: `full_text` (if it is available), and `text`.
+Single-column or two columns (`text`, and `full-text`) containing Tweet text.
 
 ### Scala DF
 
@@ -93,12 +119,25 @@ text(tweetsDF).show(2, false)
 |Baket ang pogi mo???             |
 |今日すげぇな！#安元江口と夜あそび|
 +---------------------------------+
-only showing top 2 rows
 ```
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.text(df).show(2, False)
+
++---------------------------------+
+|text                             |
++---------------------------------+
+|Baket ang pogi mo???             |
+|今日すげぇな！#安元江口と夜あそび|
++---------------------------------+
+```
 
 ## Extract Tweet Times
 
@@ -125,9 +164,25 @@ only showing top 2 rows
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.times(df).show(2, False)
+
++------------------------------+
+|created_at                    |
++------------------------------+
+|Mon Dec 02 14:16:05 +0000 2019|
+|Mon Dec 02 14:16:05 +0000 2019|
++------------------------------+
+```
 
 ## Extract Tweet Sources
+
+Single-column DataFrame containing the source of the tweet.
 
 ### Scala DF
 
@@ -157,9 +212,33 @@ sources(tweetsDF).show(10, false)
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.sources(df).show(10, False)
+
++------------------------------------------------------------------------------------+
+|source                                                                              |
++------------------------------------------------------------------------------------+
+|<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>|
+|<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>|
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="https://mobile.twitter.com" rel="nofollow">Twitter Web App</a>             |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
+|<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>|
+|<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>  |
++------------------------------------------------------------------------------------+
+```
 
 ## Extract Hashtags
+
+Single-column DataFrame containg Hashtags.
 
 ### Scala DF
 
@@ -180,9 +259,24 @@ hashtags(tweetsDF).show
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.hashtags(df).show()
+
++------------------+
+|          hashtags|
++------------------+
+|安元江口と夜あそび|
++------------------+
+```
 
 ## Extract Urls
+
+Single-column DataFrame containing urls.
 
 ### Scala DF
 
@@ -204,9 +298,33 @@ urls(tweetsDF).show(10, false)
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.urls(df).show(10, False)
+
++-----------------------+
+|url                    |
++-----------------------+
+|https://t.co/hONLvNozJg|
+|https://t.co/mI5HYXLXwy|
+|https://t.co/OLcG6Vu6dI|
+|https://t.co/6KANFBbSa2|
+|https://t.co/NRKfpoyubk|
+|https://t.co/K66y3z4o8U|
+|https://t.co/k0k7VndNzw|
+|https://t.co/Vf7qICr4v0|
+|https://t.co/fqRf3Og2qw|
+|https://t.co/kC3XMKWBR8|
++-----------------------+
+```
 
 ## Extract Animated Gif Urls
+
+Single-column DataFrame containing animated gif urls.
 
 ### Scala DF
 
@@ -229,9 +347,26 @@ animatedGifUrls(tweetsDF).show(10, false)
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.animatedGifUrls(df).show(10, False)
+
++-----------------------------------------------------------+
+|animated_gif_url                                           |
++-----------------------------------------------------------+
+|https://pbs.twimg.com/tweet_video_thumb/EKyat33U4AEpVFf.jpg|
+|https://pbs.twimg.com/tweet_video_thumb/EKyQ1fAU8AM7r1I.jpg|
+|https://pbs.twimg.com/tweet_video_thumb/EKyau1OU8AAD_OZ.jpg|
++-----------------------------------------------------------+
+```
 
 ## Extract Image Urls
+
+Single-column DataFrame containing image urls.
 
 ### Scala DF
 
@@ -241,7 +376,7 @@ import io.archivesunleashed._
 val tweets = "src/test/resources/500-sample.jsonl"
 val tweetsDF = spark.read.json(tweets)
 
-imageUrls(tweetsDF).show(10, false)
+imageUrls(tweetsDF).show(5, false)
 
 +-----------------------------------------------+
 |image_url                                      |
@@ -256,10 +391,27 @@ imageUrls(tweetsDF).show(10, false)
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
 
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.imageUrls(df).show(5, False)
+
++-----------------------------------------------+
+|image_url                                      |
++-----------------------------------------------+
+|https://pbs.twimg.com/media/EKjNNRFXsAANHyQ.jpg|
+|https://pbs.twimg.com/media/EKvWq8LXsAE_HhV.jpg|
+|https://pbs.twimg.com/media/EKx9va5XUAEKcry.jpg|
+|https://pbs.twimg.com/media/EKyNK0-WoAMDou3.jpg|
+|https://pbs.twimg.com/media/EKyHOyZVUAE3GX6.jpg|
++-----------------------------------------------+
+```
 ## Extract Media Urls
 
+Single-column DataFrame containing animated gif urls, image urls, and video urls.
 ### Scala DF
 
 ```scala
@@ -283,9 +435,28 @@ mediaUrls(tweetsDF).show(5, false)
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.mediaUrls(df).show(5, False)
+
++-----------------------------------------------+
+|image_url                                      |
++-----------------------------------------------+
+|https://pbs.twimg.com/media/EKjNNRFXsAANHyQ.jpg|
+|https://pbs.twimg.com/media/EKvWq8LXsAE_HhV.jpg|
+|https://pbs.twimg.com/media/EKx9va5XUAEKcry.jpg|
+|https://pbs.twimg.com/media/EKyNK0-WoAMDou3.jpg|
+|https://pbs.twimg.com/media/EKyHOyZVUAE3GX6.jpg|
++-----------------------------------------------+
+```
 
 ## Extract Video Urls
+
+Single-column DataFrame containing video urls.
 
 ### Scala DF
 
@@ -310,9 +481,28 @@ videoUrls(tweetsDF).show(5, false)
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.videoUrls(df).show(5, False)
+
++---------------------------------------------------------------------------------------------------+
+|video_url                                                                                          |
++---------------------------------------------------------------------------------------------------+
+|https://video.twimg.com/ext_tw_video/1201113203125583872/pu/pl/mLQJE9rIBSE6DaQ_.m3u8?tag=10        |
+|https://video.twimg.com/ext_tw_video/1201113203125583872/pu/vid/460x258/o5wbkNtC_yVBiGvM.mp4?tag=10|
+|https://video.twimg.com/ext_tw_video/1200729524045901825/pu/pl/1LRDIgIbWofMDpOa.m3u8?tag=10        |
+|https://video.twimg.com/ext_tw_video/1200729524045901825/pu/vid/360x638/KrMl6qgy_8ugHBW-.mp4?tag=10|
+|https://video.twimg.com/ext_tw_video/1200729524045901825/pu/vid/320x568/lMOyqZH6fnCoDGzI.mp4?tag=10|
++---------------------------------------------------------------------------------------------------+
+```
 
 ## Remove Sensitive Tweets
+
+Filters outs tweets labeled as sensisitive.
 
 ### Scala DF
 
@@ -328,9 +518,19 @@ res0: Long = 246
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+FilterTweet.removeSensitive(df).count()
+246
+```
 
 ## Remove Retweets
+
+Filters out retweets.
 
 ### Scala DF
 
@@ -346,9 +546,19 @@ res0: Long = 230
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+FilterTweet.removeRetweets(df).count()
+230
+```
 
 ## Remove Non-verified User Tweets
+
+Filters out tweets from non-verified users.
 
 ### Scala DF
 
@@ -364,8 +574,15 @@ res0: Long = 5
 
 ### Python DF
 
-**TODO**
+```python
+from twut import *
 
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+FilterTweet.removeNonVerified(df).count()
+5
+```
 
 ## Work with DataFrame Results
 

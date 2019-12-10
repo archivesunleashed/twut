@@ -66,7 +66,7 @@ package object archivesunleashed {
   /** Creates a DataFrame of Tweet text.
    *
    * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a two columns (text, and full-text) containing Tweet text.
+   * @return a single column or two columns (text, and full-text) containing Tweet text.
    */
   def text(tweets: DataFrame): DataFrame = {
     if (hasColumn(tweets, "full_text") == true) {
