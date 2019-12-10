@@ -712,7 +712,7 @@ Scala assigns the results to `r` is this case, which you can then subsequently m
 If you want _all_ results, replace `.take(10)` with `.collect()`.
 This will return _all_ results to the console.
 
-**WARNING**: Be careful with `.collect()`! If your results contain ten million records, AUT will try to return _all of them_  to your console (on your physical machine).
+**WARNING**: Be careful with `.collect()`! If your results contain ten million records, TWUT will try to return _all of them_  to your console (on your physical machine).
 Most likely, your machine won't have enough memory!
 
 Alternatively, if you want to save the results to disk, replace `.show(20, false)` with the following:
@@ -752,4 +752,66 @@ Note that this works even across languages (e.g., export to Parquet from Scala, 
 
 ## Python
 
-TODO: Python basically the same, but with Python syntax. However, we should be explicit and lay out the steps.
+If you want to return a set of results, the counterpart of `.take(10)` with RDDs is `.head(10)`.
+So, something like (in Python):
+
+```python
+  SelectTweet.ids(df)
+  # more transformations here...
+  .head(10)
+```
+
+In the PySpark console, the results are returned as a List of rows, like the following:
+
+```
+[Row(id_str='1201505319257403392'), Row(id_str='1201505319282565121'), Row(id_str='1201505319257608197'), Row(id_str='1201505319261655041'), Row(id_str='1201505319261597696'), Row(id_str='1201505319274332165'), Row(id_str='1201505319261745152'), Row(id_str='1201505319270146049'), Row(id_str='1201505319286755328'), Row(id_str='1201505319286984705')]
+```
+
+You can assign the tranformations to a variable, like this:
+
+```python
+tweet_ids = SelectTweet.ids(df)
+  # more transformations here...
+  .head(10)
+```
+
+If you want _all_ results, replace `.head(10)` with `.collect()`.
+This will return _all_ results to the console.
+
+**WARNING**: Be careful with `.collect()`! If your results contain ten million records, TWUT will try to return _all of them_  to your console (on your physical machine).
+Most likely, your machine won't have enough memory!
+
+Alternatively, if you want to save the results to disk, replace `.show(20, false)` with the following:
+
+```python
+tweet_ids.write.csv("/path/to/export/directory/")
+```
+
+Replace `/path/to/export/directory/` with your desired location.
+Note that this is a _directory_, not a _file_.
+
+Depending on your intended use of the output, you may want to include headers in the CSV file, in which case:
+
+```python
+tweet_ids.write.csv("/path/to/export/directory/", header='true')
+```
+
+If you want to store the results with the intention to read the results back later for further processing, then use Parquet format:
+
+```python
+tweet_ids.write.parquet("/path/to/export/directory/")
+```
+
+Replace `/path/to/export/directory/` with your desired location.
+Note that this is a _directory_, not a _file_.
+
+Later, as in a completely separate session, you can read the results back in and continuing processing, as follows:
+
+```python
+tweet_ids = spark.read.parquet("/path/to/export/directory/")
+
+tweet_ids.show(20, false)
+```
+
+Parquet encodes metadata such as the schema and column types, so you can pick up exactly where you left off.
+Note that this works even across languages (e.g., export to Parquet from Scala, read back in Python) or any system that supports Parquet.
