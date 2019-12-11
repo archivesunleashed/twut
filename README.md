@@ -24,14 +24,6 @@ An open-source toolkit for analyzing line-oriented JSON Twitter archives with Ap
 $ spark-shell --packages "io.archivesunleashed:twut:0.0.4"
 ```
 
-#### PySpark
-
-```
-$ pyspark --py-files /path/to/twut.zip --packages "io.archivesunleashed:twut:0.0.4"
-```
-
-You will need the `PYSPARK_PYTHON` and `PYSPARK_DRIVER_PYTHON` environment variables set.
-
 ### Jars
 
 You can download the [latest release files here](https://github.com/archivesunleashed/twut/releases) and include it like so:
@@ -45,8 +37,10 @@ $ spark-shell --jars /path/to/twut-0.0.4-fatjar.jar
 #### PySpark
 
 ```
-$ pyspark --py-files /path/to/twut.zip --driver-class-path /path/to/twut-0.0.4-fatjar.jar --jars /path/to/twut-0.0.4-fatjar.jar
+$ pyspark --py-files /path/to/twut-0.0.4.zip
 ```
+
+You will need the `PYSPARK_PYTHON` and `PYSPARK_DRIVER_PYTHON` environment variables set.
 
 ## Documentation! Or, how do I use this?
 
