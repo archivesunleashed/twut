@@ -15,7 +15,6 @@
 - [Extract video urls](usage.md#extract-video-urls)
 - [Remove sensitive tweets](usage.md#remove-sensitive-tweets)
 - [Remove retweets](usage.md#remove-retweets)
-- [Remove sensitive tweets](usage.md#remove-sensitive-tweets)
 - [Remove non-verified user tweets](usage.md#remove-non-verified-user-tweets)
 - [Work with DataFrame Results](usage.md#work-with-dataframe-results)
 
