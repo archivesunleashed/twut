@@ -44,6 +44,19 @@ package object archivesunleashed {
     )
   }
 
+  /** Creates a DataFrame of the BCP 47 language identifier corresponding
+   *  to the machine-detected language.
+   *
+   * @param tweets DataFrame of line-oriented Twitter JSON
+   * @return a single-column DataFrame containing the BCP 47 language identifier
+   *   corresponding to the machine-detected language.
+   */
+  def language(tweets: DataFrame): DataFrame = {
+    tweets.select(
+      "lang"
+    )
+  }
+
   /** Creates a DataFrame of Twitter User Info.
    *
    * @param tweets DataFrame of line-oriented Twitter JSON

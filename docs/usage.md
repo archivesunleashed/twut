@@ -3,6 +3,7 @@
 ## How do I...
 
 - [Extract tweet ids](usage.md#extract-tweet-ids)
+- [Extract tweet language](usage.md#extract-tweet-language)
 - [Extract user information](usage.md#extract-user-information)
 - [Extract tweet text](usage.md#extract-tweet-text)
 - [Extract tweet times](usage.md#extract-tweet-times)
@@ -63,6 +64,58 @@ SelectTweet.ids(df).show(2, False)
 |1201505319282565121|
 +-------------------+
 ```
+## Extract Tweet Language
+
+Single-column DataFrame containing the [BCP 47](https://tools.ietf.org/html/bcp47) language identifier corresponding to the machine-detected language.
+
+### Scala DF
+
+```scala
+import io.archivesunleashed._
+
+val tweets = "src/test/resources/10-sample.jsonl"
+val tweetsDF = spark.read.json(tweets)
+
+language(tweetsDF).show(5, false)
+```
+
+**Output**:
+```
++----+
+|lang|
++----+
+|tl  |
+|ja  |
+|ar  |
+|ja  |
+|ja  |
++----+
+```
+
+### Python DF
+
+```python
+from twut import *
+
+path = "src/test/resources/500-sample.jsonl"
+df = spark.read.json(path)
+
+SelectTweet.language(df).show(5, False)
+```
+
+**Output**:
+```
++----+
+|lang|
++----+
+|tl  |
+|ja  |
+|ar  |
+|ja  |
+|ja  |
++----+
+```
+
 ## Extract User Information
 
 Multi-column DataFrame containing the following columns: `favourites_count`, `followers_count`, `friends_count`, `id_str`, `location`, `name`, `screen_name`, `statuses_count`, and `verified`.

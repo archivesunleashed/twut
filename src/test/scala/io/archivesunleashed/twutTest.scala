@@ -70,6 +70,23 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     assert("1201505319282565121" == idsTest(2).get(0))
   }
 
+  test("Language Extraction") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(tweets)
+
+    val languageTest = language(tweetsDF)
+      .head(5)
+    assert(languageTest.size == 5)
+    assert("tl" == languageTest(0).get(0))
+    assert("ja" == languageTest(1).get(0))
+    assert("ar" == languageTest(2).get(0))
+    assert("ja" == languageTest(3).get(0))
+    assert("ja" == languageTest(4).get(0))
+  }
+
   test("User Info Extraction") {
     val spark = SparkSession.builder().master("local").getOrCreate()
     // scalastyle:off

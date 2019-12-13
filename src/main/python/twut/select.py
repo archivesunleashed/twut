@@ -19,6 +19,9 @@ class SelectTweet:
     def ids(df):
         return df.select("id_str")
 
+    def language(df):
+        return df.select("lang")
+
     def userInfo(df):
         return df.select(
             "user.favourites_count",
