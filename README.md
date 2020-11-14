@@ -1,6 +1,5 @@
 # Tweet Archives Unleashed Toolkit (twut)
 
-[![Build Status](https://travis-ci.org/archivesunleashed/twut.svg?branch=main)](https://travis-ci.org/archivesunleashed/twut)
 [![codecov](https://codecov.io/gh/archivesunleashed/twut/branch/main/graph/badge.svg)](https://codecov.io/gh/archivesunleashed/twut)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)

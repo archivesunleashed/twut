@@ -1,0 +1,17 @@
+name: Run Scala Formatter (scalafmt)
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  scalafmt-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Run scalafmt
+        uses: openlawteam/scalafmt-ci@v2
+        with:
+          args: '--list'
