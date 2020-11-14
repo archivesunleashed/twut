@@ -1,6 +1,6 @@
 # Tweet Archives Unleashed Toolkit (twut)
 
-[![codecov](https://codecov.io/gh/archivesunleashed/twut/branch/master/graph/badge.svg)](https://codecov.io/gh/archivesunleashed/twut)
+[![codecov](https://codecov.io/gh/archivesunleashed/twut/branch/main/graph/badge.svg)](https://codecov.io/gh/archivesunleashed/twut)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.archivesunleashed/twut)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Contribution Guidelines](http://img.shields.io/badge/CONTRIBUTING-Guidelines-blue.svg)](./CONTRIBUTING.md)
@@ -43,7 +43,7 @@ You will need the `PYSPARK_PYTHON` and `PYSPARK_DRIVER_PYTHON` environment varia
 
 ## Documentation! Or, how do I use this?
 
-Once built or downloaded, you can follow the basic set of recipes and tutorials [here](https://github.com/archivesunleashed/twut/tree/master/docs/usage.md).
+Once built or downloaded, you can follow the basic set of recipes and tutorials [here](https://github.com/archivesunleashed/twut/tree/main/docs/usage.md).
 
 # License
 
