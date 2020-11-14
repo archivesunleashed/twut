@@ -27,17 +27,18 @@ import org.apache.spark.sql.functions.{array_contains, col, explode}
 package object archivesunleashed {
 
   /** Checks to see if a column exists.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return boolean.
-   */
-  def hasColumn(tweets: DataFrame, column: String) = Try(tweets(column)).isSuccess
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return boolean.
+    */
+  def hasColumn(tweets: DataFrame, column: String) =
+    Try(tweets(column)).isSuccess
 
   /** Creates a DataFrame of Tweet IDs.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing Twitter IDs.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing Twitter IDs.
+    */
   def ids(tweets: DataFrame): DataFrame = {
     tweets.select(
       "id_str"
@@ -45,12 +46,12 @@ package object archivesunleashed {
   }
 
   /** Creates a DataFrame of the BCP 47 language identifier corresponding
-   *  to the machine-detected language.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing the BCP 47 language identifier
-   *   corresponding to the machine-detected language.
-   */
+    *  to the machine-detected language.
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing the BCP 47 language identifier
+    *   corresponding to the machine-detected language.
+    */
   def language(tweets: DataFrame): DataFrame = {
     tweets.select(
       "lang"
@@ -58,10 +59,10 @@ package object archivesunleashed {
   }
 
   /** Creates a DataFrame of Twitter User Info.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a multi-column DataFrame containing Twitter user info.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a multi-column DataFrame containing Twitter user info.
+    */
   def userInfo(tweets: DataFrame): DataFrame = {
     tweets.select(
       "user.favourites_count",
@@ -77,10 +78,10 @@ package object archivesunleashed {
   }
 
   /** Creates a DataFrame of Tweet text.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single column or two columns (text, and full-text) containing Tweet text.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single column or two columns (text, and full-text) containing Tweet text.
+    */
   def text(tweets: DataFrame): DataFrame = {
     if (hasColumn(tweets, "full_text") == true) {
       tweets.select(
@@ -95,10 +96,10 @@ package object archivesunleashed {
   }
 
   /** Creates a DataFrame of Tweet times.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing UTC Tweet times.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing UTC Tweet times.
+    */
   def times(tweets: DataFrame): DataFrame = {
     tweets.select(
       "created_at"
@@ -106,37 +107,39 @@ package object archivesunleashed {
   }
 
   /** Creates a DataFrame of Hashtags.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containg Hashtags.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containg Hashtags.
+    */
   def hashtags(tweets: DataFrame): DataFrame = {
     tweets.select(
       explode(col("entities.hashtags.text"))
         .as("hashtags")
-      )
+    )
   }
 
   /** Creates a DataFrame of Urls.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containg Urls.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containg Urls.
+    */
   def urls(tweets: DataFrame): DataFrame = {
     val tweetUrls = tweets.select(
       explode(col("entities.urls.url"))
-        .as("url"))
+        .as("url")
+    )
     val expandedUrls = tweets.select(
       explode(col("entities.urls.expanded_url"))
-        .as("expanded_url"))
+        .as("expanded_url")
+    )
     tweetUrls.union(expandedUrls)
   }
 
   /** Creates a DataFrame of tweet sources.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing tweet sources.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing tweet sources.
+    */
   def sources(tweets: DataFrame): DataFrame = {
     tweets.select(
       "source"
@@ -144,125 +147,135 @@ package object archivesunleashed {
   }
 
   /** Creates a DataFrame of Animated GIF urls.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing Animated GIF urls.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing Animated GIF urls.
+    */
   def animatedGifUrls(tweets: DataFrame): DataFrame = {
-    tweets.where(
-      col("extended_entities").isNotNull
-        && col("extended_entities.media").isNotNull
-        && array_contains(col("extended_entities.media.type"), "animated_gif")
+    tweets
+      .where(
+        col("extended_entities").isNotNull
+          && col("extended_entities.media").isNotNull
+          && array_contains(col("extended_entities.media.type"), "animated_gif")
       )
-        .select(
-          explode(col("extended_entities.media.media_url_https"))
-            .alias("animated_gif_url"))
+      .select(
+        explode(col("extended_entities.media.media_url_https"))
+          .alias("animated_gif_url")
+      )
   }
 
   /** Creates a DataFrame of image urls.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing Animated GIF urls.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing Animated GIF urls.
+    */
   def imageUrls(tweets: DataFrame): DataFrame = {
-    tweets.where(
-      col("entities.media").isNotNull
-        && array_contains(col("extended_entities.media.type"), "photo")
+    tweets
+      .where(
+        col("entities.media").isNotNull
+          && array_contains(col("extended_entities.media.type"), "photo")
       )
-        .select(
-          explode(col("entities.media.media_url_https"))
-            .alias("image_url"))
+      .select(
+        explode(col("entities.media.media_url_https"))
+          .alias("image_url")
+      )
   }
 
   /** Creates a DataFrame of video urls.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing Animated GIF urls.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing Animated GIF urls.
+    */
   def videoUrls(tweets: DataFrame): DataFrame = {
-    tweets.where(
-      col("extended_entities").isNotNull
-        && col("extended_entities.media").isNotNull
-        && col("extended_entities.media.video_info").isNotNull
-        && array_contains(col("extended_entities.media.type"), "video")
+    tweets
+      .where(
+        col("extended_entities").isNotNull
+          && col("extended_entities.media").isNotNull
+          && col("extended_entities.media.video_info").isNotNull
+          && array_contains(col("extended_entities.media.type"), "video")
       )
-        .select(
-          explode(col("extended_entities.media.video_info.variants"))
-              .alias("video_info"))
-            .filter(col("video_info").isNotNull)
-            .select(explode(col("video_info")))
-            .withColumn("video_url", col("col.url"))
-            .drop(col("col"))
+      .select(
+        explode(col("extended_entities.media.video_info.variants"))
+          .alias("video_info")
+      )
+      .filter(col("video_info").isNotNull)
+      .select(explode(col("video_info")))
+      .withColumn("video_url", col("col.url"))
+      .drop(col("col"))
   }
 
   /** Creates a DataFrame of media urls.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return a single-column DataFrame containing Animated GIF urls.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return a single-column DataFrame containing Animated GIF urls.
+    */
   def mediaUrls(tweets: DataFrame): DataFrame = {
-    val animated_gif_urls = tweets.where(
-      col("extended_entities").isNotNull
-        && col("extended_entities.media").isNotNull
-        && array_contains(col("extended_entities.media.type"), "animated_gif")
+    val animated_gif_urls = tweets
+      .where(
+        col("extended_entities").isNotNull
+          && col("extended_entities.media").isNotNull
+          && array_contains(col("extended_entities.media.type"), "animated_gif")
       )
-        .select(
-          explode(col("extended_entities.media.media_url_https"))
-            .alias("animated_gif_url"))
-
-    val image_urls = tweets.where(
-      col("entities.media").isNotNull
-        && array_contains(col("extended_entities.media.type"), "photo")
+      .select(
+        explode(col("extended_entities.media.media_url_https"))
+          .alias("animated_gif_url")
       )
-        .select(
-          explode(col("entities.media.media_url_https"))
-            .alias("image_url"))
 
-    val video_urls = tweets.where(
-      col("extended_entities").isNotNull
-        && col("extended_entities.media").isNotNull
-        && col("extended_entities.media.video_info").isNotNull
-        && array_contains(col("extended_entities.media.type"), "video")
+    val image_urls = tweets
+      .where(
+        col("entities.media").isNotNull
+          && array_contains(col("extended_entities.media.type"), "photo")
       )
-        .select(
-          explode(col("extended_entities.media.video_info.variants"))
-              .alias("video_info"))
-            .filter(col("video_info").isNotNull)
-            .select(explode(col("video_info")))
-            .withColumn("video_url", col("col.url"))
-            .drop(col("col"))
+      .select(
+        explode(col("entities.media.media_url_https"))
+          .alias("image_url")
+      )
 
-  image_urls.union(video_urls.union(animated_gif_urls))
+    val video_urls = tweets
+      .where(
+        col("extended_entities").isNotNull
+          && col("extended_entities.media").isNotNull
+          && col("extended_entities.media.video_info").isNotNull
+          && array_contains(col("extended_entities.media.type"), "video")
+      )
+      .select(
+        explode(col("extended_entities.media.video_info.variants"))
+          .alias("video_info")
+      )
+      .filter(col("video_info").isNotNull)
+      .select(explode(col("video_info")))
+      .withColumn("video_url", col("col.url"))
+      .drop(col("col"))
+
+    image_urls.union(video_urls.union(animated_gif_urls))
   }
 
   /** Creates a DataFrame that filters out sensitives tweets.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return original DataFrame with sensitive tweets removed.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return original DataFrame with sensitive tweets removed.
+    */
   def removeSensitive(tweets: DataFrame): DataFrame = {
-    tweets.filter(
-      col("possibly_sensitive").isNull)
-        .filter(col("retweeted_status.possibly_sensitive").isNull)
+    tweets
+      .filter(col("possibly_sensitive").isNull)
+      .filter(col("retweeted_status.possibly_sensitive").isNull)
   }
 
   /** Creates a DataFrame that filters out retweets.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return original DataFrame with retweets removed.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return original DataFrame with retweets removed.
+    */
   def removeRetweets(tweets: DataFrame): DataFrame = {
-    tweets.filter(
-      col("retweeted_status").isNull)
+    tweets.filter(col("retweeted_status").isNull)
   }
 
   /** Creates a DataFrame that filters out tweets from non-verified users.
-   *
-   * @param tweets DataFrame of line-oriented Twitter JSON
-   * @return original DataFrame with non-verified users' tweets removed.
-   */
+    *
+    * @param tweets DataFrame of line-oriented Twitter JSON
+    * @return original DataFrame with non-verified users' tweets removed.
+    */
   def removeNonVerified(tweets: DataFrame): DataFrame = {
-    tweets.filter(
-      col("user.verified") === true)
+    tweets.filter(col("user.verified") === true)
   }
 }
