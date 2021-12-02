@@ -124,15 +124,31 @@ package object archivesunleashed {
     * @return a single-column DataFrame containg Urls.
     */
   def urls(tweets: DataFrame): DataFrame = {
-    val tweetUrls = tweets.select(
-      explode(col("entities.urls.url"))
-        .as("url")
-    )
-    val expandedUrls = tweets.select(
-      explode(col("entities.urls.expanded_url"))
-        .as("expanded_url")
-    )
-    tweetUrls.union(expandedUrls)
+    if (hasColumn(tweets, "entities.urls.unshortened_url") == true) {
+      val tweetUrls = tweets.select(
+        explode(col("entities.urls.url"))
+          .as("url")
+      )
+      val expandedUrls = tweets.select(
+        explode(col("entities.urls.expanded_url"))
+          .as("expanded_url")
+      )
+      val unshrtnUrls = tweets.select(
+        explode(col("entities.urls.unshortened_url"))
+          .as("unshortened_url")
+      )
+      tweetUrls.unionAll(expandedUrls).unionAll(unshrtnUrls)
+    } else {
+      val tweetUrls = tweets.select(
+        explode(col("entities.urls.url"))
+          .as("url")
+      )
+      val expandedUrls = tweets.select(
+        explode(col("entities.urls.expanded_url"))
+          .as("expanded_url")
+      )
+      tweetUrls.union(expandedUrls)
+    }
   }
 
   /** Creates a DataFrame of tweet sources.
