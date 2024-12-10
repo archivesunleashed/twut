@@ -20,5 +20,3 @@ jobs:
         run: |
           mvn install -B -V
           mvn javadoc:jar
-      - name: Upload coverage report to Codecov
-        run: bash <(curl -s https://codecov.io/bash)
