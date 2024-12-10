@@ -47,11 +47,11 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val hasFullText = hasColumn(tweetsDF, "full_text")
-    val hasText = hasColumn(tweetsDF, "text")
+    val textDF = tweetsDF.text
+    val columns = textDF.columns
 
-    assert(hasFullText == false)
-    assert(hasText == true)
+    assert(columns.contains("text"))
+    assert(!columns.contains("full_text"))
   }
 
   test("ID Extraction") {
@@ -61,7 +61,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val idsTest = ids(tweetsDF)
+    val idsTest = tweetsDF.ids
       .orderBy(desc("id_str"))
       .head(3)
     assert(idsTest.size == 3)
@@ -77,7 +77,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val languageTest = language(tweetsDF)
+    val languageTest = tweetsDF.language
       .head(5)
     assert(languageTest.size == 5)
     assert("tl" == languageTest(0).get(0))
@@ -94,7 +94,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val userInfoTest = userInfo(tweetsDF)
+    val userInfoTest = tweetsDF.userInfo
       .orderBy(desc("id_str"))
       .head(1)
     assert(userInfoTest.size == 1)
@@ -118,7 +118,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val textTest = text(tweetsDF)
+    val textTest = tweetsDF.text
       .head(3)
     assert(textTest.size == 3)
     assert("Baket ang pogi mo???" == textTest(0).get(0))
@@ -133,7 +133,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val timesTest = times(tweetsDF)
+    val timesTest = tweetsDF.times
       .head(5)
     assert(timesTest.size == 5)
     assert("Mon Dec 02 14:16:05 +0000 2019" == timesTest(0).get(0))
@@ -150,7 +150,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val hashtagsTest = hashtags(tweetsDF)
+    val hashtagsTest = tweetsDF.hashtags
       .head(1)
     assert(hashtagsTest.size == 1)
     assert("安元江口と夜あそび" == hashtagsTest(0).get(0))
@@ -163,7 +163,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val urlsTest = urls(tweetsDF)
+    val urlsTest = tweetsDF.urls
       .head(2)
     assert(urlsTest.size == 2)
     assert("https://t.co/hONLvNozJg" == urlsTest(0).get(0))
@@ -181,7 +181,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(tweets)
 
-    val sourcesTest = sources(tweetsDF)
+    val sourcesTest = tweetsDF.sources
       .head(5)
     assert(sourcesTest.size == 5)
     assert(
@@ -218,7 +218,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val animatedGifsTest = animatedGifUrls(tweetsDF)
+    val animatedGifsTest = tweetsDF.animatedGifUrls
       .head(3)
     assert(animatedGifsTest.size == 3)
     assert(
@@ -245,7 +245,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val imageUrlsTest = imageUrls(tweetsDF)
+    val imageUrlsTest = tweetsDF.imageUrls
       .head(3)
     assert(imageUrlsTest.size == 3)
     assert(
@@ -269,7 +269,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val videoUrlsTest = videoUrls(tweetsDF)
+    val videoUrlsTest = tweetsDF.videoUrls
       .head(3)
     assert(videoUrlsTest.size == 3)
     assert(
@@ -296,7 +296,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val mediaUrlsTest = mediaUrls(tweetsDF)
+    val mediaUrlsTest = tweetsDF.mediaUrls
       .head(3)
     assert(mediaUrlsTest.size == 3)
     assert(
@@ -320,7 +320,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val removeSensitiveTest = removeSensitive(tweetsDF)
+    val removeSensitiveTest = tweetsDF.removeSensitive
 
     assert(tweetsDF.count == 500)
     assert(removeSensitiveTest.count == 246)
@@ -333,7 +333,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val removeRetweetsTest = removeRetweets(tweetsDF)
+    val removeRetweetsTest = tweetsDF.removeRetweets
 
     assert(tweetsDF.count == 500)
     assert(removeRetweetsTest.count == 230)
@@ -346,7 +346,7 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     // scalastyle:on
     val tweetsDF = spark.read.json(bigTweets)
 
-    val removeNonVerifiedTest = removeNonVerified(tweetsDF)
+    val removeNonVerifiedTest = tweetsDF.removeNonVerified
 
     assert(tweetsDF.count == 500)
     assert(removeNonVerifiedTest.count == 5)

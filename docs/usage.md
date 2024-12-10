@@ -29,9 +29,9 @@ Single-column DataFrame containing Tweet IDs.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-ids(tweetsDF).show(2, false)
+df.ids.show(2, false)
 ```
 
 **Output**:
@@ -52,7 +52,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.ids(df).show(2, False)
+df.ids().show(2, False)
 ```
 
 **Output**:
@@ -74,9 +74,9 @@ Single-column DataFrame containing the [BCP 47](https://tools.ietf.org/html/bcp4
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-language(tweetsDF).show(5, false)
+df.language.show(5, false)
 ```
 
 **Output**:
@@ -100,7 +100,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.language(df).show(5, False)
+df.language().show(5, False)
 ```
 
 **Output**:
@@ -126,9 +126,9 @@ Multi-column DataFrame containing the following columns: `favourites_count`, `fo
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-userInfo(tweetsDF).show(2, false)
+df.userInfo.show(2, false)
 ```
 
 **Output**:
@@ -150,7 +150,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.userInfo(df).show(2, False)
+df.userInfo().show(2, False)
 ```
 
 **Output**:
@@ -172,9 +172,9 @@ Single-column or two columns (`text`, and `full-text`) containing Tweet text.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-text(tweetsDF).show(2, false)
+df.text.show(2, false)
 ```
 
 **Output**:
@@ -195,7 +195,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.text(df).show(2, False)
+df.text().show(2, False)
 ```
 
 **Output**:
@@ -218,9 +218,9 @@ Single-column DataFrame containing the tweet time.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-times(tweetsDF).show(2, false)
+df.times.show(2, false)
 ```
 
 **Output**:
@@ -242,7 +242,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.times(df).show(2, False)
+df.times().show(2, False)
 ```
 
 **Output**:
@@ -265,9 +265,9 @@ Single-column DataFrame containing the source of the tweet.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-sources(tweetsDF).show(10, false)
+df.sources.show(10, false)
 ```
 
 **Output**:
@@ -296,7 +296,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.sources(df).show(10, False)
+df.sources().show(10, False)
 ```
 
 **Output**:
@@ -319,7 +319,7 @@ SelectTweet.sources(df).show(10, False)
 
 ## Extract Hashtags
 
-Single-column DataFrame containg Hashtags.
+Single-column DataFrame containing Hashtags.
 
 ### Scala DF
 
@@ -327,9 +327,9 @@ Single-column DataFrame containg Hashtags.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-hashtags(tweetsDF).show
+df.hashtags.show()
 ```
 
 **Output**:
@@ -349,7 +349,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.hashtags(df).show()
+df.hashtags().show()
 ```
 
 **Output**:
@@ -371,9 +371,9 @@ Single-column DataFrame containing urls.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/10-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-urls(tweetsDF).show(10, false)
+df.urls.show(10, false)
 ```
 
 **Output**:
@@ -394,7 +394,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.urls(df).show(10, False)
+df.urls().show(10, False)
 ```
 
 **Output**:
@@ -425,9 +425,9 @@ Single-column DataFrame containing animated gif urls.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-animatedGifUrls(tweetsDF).show(10, false)
+df.animatedGifUrls.show(10, false)
 ```
 
 **Output**:
@@ -449,7 +449,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.animatedGifUrls(df).show(10, False)
+df.animatedGifUrls().show(10, False)
 ```
 
 **Output**:
@@ -473,9 +473,9 @@ Single-column DataFrame containing image urls.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-imageUrls(tweetsDF).show(5, false)
+df.imageUrls.show(5, false)
 ```
 
 **Output**:
@@ -499,7 +499,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.imageUrls(df).show(5, False)
+df.imageUrls().show(5, False)
 ```
 
 **Output**:
@@ -523,9 +523,9 @@ Single-column DataFrame containing animated gif urls, image urls, and video urls
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-mediaUrls(tweetsDF).show(5, false)
+df.mediaUrls.show(5, false)
 ```
 
 **Output**:
@@ -549,7 +549,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.mediaUrls(df).show(5, False)
+df.mediaUrls().show(5, False)
 ```
 
 **Output**:
@@ -575,9 +575,9 @@ Single-column DataFrame containing video urls.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-videoUrls(tweetsDF).show(5, false)
+df.videoUrls.show(5, false)
 ```
 
 **Output**:
@@ -601,7 +601,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-SelectTweet.videoUrls(df).show(5, False)
+df.videoUrls().show(5, False)
 ```
 
 **Output**:
@@ -619,7 +619,7 @@ SelectTweet.videoUrls(df).show(5, False)
 
 ## Remove Sensitive Tweets
 
-Filters outs tweets labeled as sensisitive.
+Filters outs tweets labeled as sensitive.
 
 ### Scala DF
 
@@ -627,9 +627,9 @@ Filters outs tweets labeled as sensisitive.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-removeSensitive(tweetsDF).count
+df.removeSensitive.count()
 ```
 
 **Output**:
@@ -645,7 +645,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-FilterTweet.removeSensitive(df).count()
+df.removeSensitive().count()
 ```
 
 **Output**:
@@ -663,9 +663,9 @@ Filters out retweets.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-removeRetweets(tweetsDF).count
+df.removeRetweets.count()
 ```
 
 **Output**:
@@ -681,7 +681,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-FilterTweet.removeRetweets(df).count()
+df.removeRetweets().count()
 ```
 
 **Output**:
@@ -699,9 +699,9 @@ Filters out tweets from non-verified users.
 import io.archivesunleashed._
 
 val tweets = "src/test/resources/500-sample.jsonl"
-val tweetsDF = spark.read.json(tweets)
+val df = spark.read.json(tweets)
 
-removeNonVerified(tweetsDF).count
+df.removeNonVerified.count()
 ```
 
 **Output**:
@@ -717,7 +717,7 @@ from twut import *
 path = "src/test/resources/500-sample.jsonl"
 df = spark.read.json(path)
 
-FilterTweet.removeNonVerified(df).count()
+df.removeNonVerified().count()
 ```
 
 **Output**:
@@ -735,7 +735,7 @@ If you want to return a set of results, the counterpart of `.take(10)` with RDDs
 So, something like (in Scala):
 
 ```scala
-  ids(tweetDF)
+  df.ids
   // more transformations here...
   .head(10)
 ```
@@ -754,7 +754,7 @@ Don't like the variable name Scala gives you?
 You can do something like this:
 
 ```scala
-val r = ids(tweetDF)
+val r = df.ids
   // more transformations here...
   .head(10)
 ```
@@ -808,7 +808,7 @@ If you want to return a set of results, the counterpart of `.take(10)` with RDDs
 So, something like (in Python):
 
 ```python
-  SelectTweet.ids(df)
+  df.ids()
   # more transformations here...
   .head(10)
 ```
@@ -822,7 +822,7 @@ In the PySpark console, the results are returned as a List of rows, like the fol
 You can assign the tranformations to a variable, like this:
 
 ```python
-tweet_ids = SelectTweet.ids(df)
+tweet_ids = df.ids()
   # more transformations here...
   .head(10)
 ```
@@ -845,7 +845,7 @@ Note that this is a _directory_, not a _file_.
 Depending on your intended use of the output, you may want to include headers in the CSV file, in which case:
 
 ```python
-tweet_ids.write.csv("/path/to/export/directory/", header='true')
+tweet_ids.write.csv("/path/to/export/directory/", header=True)
 ```
 
 If you want to store the results with the intention to read the results back later for further processing, then use Parquet format:
@@ -857,7 +857,7 @@ tweet_ids.write.parquet("/path/to/export/directory/")
 Replace `/path/to/export/directory/` with your desired location.
 Note that this is a _directory_, not a _file_.
 
-Later, as in a completely separate session, you can read the results back in and continuing processing, as follows:
+Later, as in a completely separate session, you can read the results back in and continue processing, as follows:
 
 ```python
 tweet_ids = spark.read.parquet("/path/to/export/directory/")

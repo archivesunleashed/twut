@@ -1,20 +1,19 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import array_contains, col, explode
+from pyspark.sql.functions import col
 
 
-class FilterTweet:
-    def __init__(self, sc, sqlContext, df):
-        self.sc = sc
-        self.sqlContext = sqlContext
-        self.df = df
+def removeRetweets(df: DataFrame) -> DataFrame:
+    """Creates a DataFrame that filters out retweets."""
+    return df.filter(col("retweeted_status").isNull())
 
-    def removeRetweets(df):
-        return df.filter("retweeted_status is NULL")
 
-    def removeSensitive(df):
-        return df.filter("possibly_sensitive is NULL").filter(
-            "retweeted_status.possibly_sensitive is NULL"
-        )
+def removeSensitive(df: DataFrame) -> DataFrame:
+    """Creates a DataFrame that filters out sensitive tweets."""
+    return df.filter(col("possibly_sensitive").isNull()).filter(
+        col("retweeted_status.possibly_sensitive").isNull()
+    )
 
-    def removeNonVerified(df):
-        return df.filter(df["user.verified"] == "true")
+
+def removeNonVerified(df: DataFrame) -> DataFrame:
+    """Creates a DataFrame that filters out tweets from non-verified users."""
+    return df.filter(col("user.verified") == True)

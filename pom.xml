@@ -16,11 +16,6 @@
     <url>https://archivesunleashed.org/</url>
   </organization>
 
-  <ciManagement>
-    <system>travis-ci</system>
-    <url>https://travis-ci.org/archivesunleashed/twut</url>
-  </ciManagement>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,9 +23,8 @@
     <scala.version>2.12.10</scala.version>
     <scala.binary.version>2.12</scala.binary.version>
     <hadoop.version>2.7.4</hadoop.version>
-    <spark.version>3.0.0-preview</spark.version>
+    <spark.version>3.0.1</spark.version>
     <github.global.server>github</github.global.server>
-    <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
     <license.plugin.version>3.0</license.plugin.version>
     <release.plugin.version>2.5.2</release.plugin.version>
     <scm-provider-gitexe.plugin.version>1.9.5</scm-provider-gitexe.plugin.version>
@@ -47,6 +41,7 @@
     <surefire.plugin.version>2.22.0</surefire.plugin.version>
     <jacoco.plugin.version>0.8.4</jacoco.plugin.version>
     <versions.plugin.version>2.1</versions.plugin.version>
+    <scala.maven.plugin.version>4.5.4</scala.maven.plugin.version>
   </properties>
 
   <licenses>
@@ -134,7 +129,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>4.2.0</version>
+        <version>${scala.maven.plugin.version}</version>
         <executions>
           <execution>
             <phase>process-resources</phase>
@@ -176,54 +171,6 @@
             <arg>${project.build.directory}/.scala_dependencies</arg>
           </args>
         </configuration>
-      </plugin>
-      <!-- For checkstyle. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
-        <configuration>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <consoleOutput>true</consoleOutput>
-          <logViolationsToConsole>true</logViolationsToConsole>
-          <failsOnError>true</failsOnError>
-          <failOnViolation>true</failOnViolation>
-          <violationSeverity>warning</violationSeverity>
-          <suppressionsLocation>config/checkstyle/suppressions.xml</suppressionsLocation>
-        </configuration>
-        <executions>
-          <execution>
-            <id>checkstyle</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- For scalastyle. -->
-      <plugin>
-        <groupId>org.scalastyle</groupId>
-        <artifactId>scalastyle-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <configuration>
-          <verbose>false</verbose>
-          <failOnViolation>true</failOnViolation>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <failOnWarning>false</failOnWarning>
-          <sourceDirectory>${project.basedir}/src/main/scala</sourceDirectory>
-          <testSourceDirectory>${project.basedir}/src/test/scala</testSourceDirectory>
-          <configLocation>${project.basedir}/config/checkstyle/scalastyle_config.xml</configLocation>
-          <outputFile>${project.basedir}/target/scalastyle-output.xml</outputFile>
-          <outputEncoding>UTF-8</outputEncoding>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <!-- For license header enforcement. -->
       <plugin>
