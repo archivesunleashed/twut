@@ -1,19 +1,9 @@
 from pyspark.sql import DataFrame
+
 from twut.filter import removeNonVerified, removeRetweets, removeSensitive
-from twut.select import (
-    animatedGifUrls,
-    hashtags,
-    ids,
-    imageUrls,
-    language,
-    mediaUrls,
-    sources,
-    text,
-    times,
-    urls,
-    userInfo,
-    videoUrls,
-)
+from twut.select import (animatedGifUrls, hashtags, ids, imageUrls, language,
+                         mediaUrls, mostRetweeted, sources, text, times, urls,
+                         userInfo, videoUrls)
 
 
 def add_twut_methods():
@@ -64,6 +54,9 @@ def add_twut_methods():
     def get_mediaUrls(self):
         return mediaUrls(self)
 
+    def get_mostRetweeted(self):
+        return mostRetweeted(self)
+
     DataFrame.removeRetweets = removeRetweets
     DataFrame.removeSensitive = removeSensitive
     DataFrame.removeNonVerified = removeNonVerified
@@ -79,6 +72,7 @@ def add_twut_methods():
     DataFrame.imageUrls = get_imageUrls
     DataFrame.videoUrls = get_videoUrls
     DataFrame.mediaUrls = get_mediaUrls
+    DataFrame.mostRetweeted = get_mostRetweeted
 
 
 add_twut_methods()

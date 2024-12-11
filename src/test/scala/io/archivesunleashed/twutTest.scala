@@ -28,6 +28,7 @@ import org.scalatest.{BeforeAndAfter, FunSuite}
 class TwutTest extends FunSuite with BeforeAndAfter {
   private val tweets = Resources.getResource("10-sample.jsonl").getPath
   private val bigTweets = Resources.getResource("500-sample.jsonl").getPath
+  private val v2Tweets = Resources.getResource("10-v2-sample.jsonl").getPath
   private val master = "local[4]"
   private val appName = "twut-test"
   private var sc: SparkContext = _
@@ -309,6 +310,22 @@ class TwutTest extends FunSuite with BeforeAndAfter {
     )
     assert(
       "https://pbs.twimg.com/media/EKx9va5XUAEKcry.jpg" == mediaUrlsTest(2)
+        .get(0)
+    )
+  }
+
+  test("Media Url Extraction v2") {
+    val spark = SparkSession.builder().master("local").getOrCreate()
+    // scalastyle:off
+    import spark.implicits._
+    // scalastyle:on
+    val tweetsDF = spark.read.json(v2Tweets)
+
+    val mediaUrlsTest = tweetsDF.mediaUrls
+      .head(3)
+    assert(mediaUrlsTest.size == 1)
+    assert(
+      "https://pbs.twimg.com/media/FgJqofEXEAAdQgA.jpg" == mediaUrlsTest(0)
         .get(0)
     )
   }

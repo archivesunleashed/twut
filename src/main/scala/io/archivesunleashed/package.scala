@@ -19,7 +19,8 @@ package io
 import scala.util.Try
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{array_contains, col, explode}
+import org.apache.spark.sql.functions.{array_contains, col, desc, explode, max}
+import org.apache.spark.sql.types.{StructField, StructType}
 
 /**
   * Package object which supplies implicits to augment generic DataFrames with twut-specific transformations.
@@ -34,7 +35,16 @@ package object archivesunleashed {
       * @return boolean.
       */
     private def hasColumn(column: String): Boolean =
-      Try(df(column)).isSuccess
+      Try(df.col(column)).isSuccess
+
+    /** Checks if v2 data exists (like the "attachments" column).
+
+      * @return boolean.
+      */
+    private def isV2Data: Boolean = {
+      Try(hasColumn("attachments.media") || hasColumn("attachments.media_keys"))
+        .getOrElse(false)
+    }
 
     /** Creates a DataFrame of Tweet IDs.
       *
@@ -60,10 +70,12 @@ package object archivesunleashed {
 
     /** Creates a DataFrame of Twitter User Info.
       *
+      * Handles both v1 and v2 Twitter data by checking the appropriate user information structures.
+      *
       * @return a multi-column DataFrame containing Twitter user info.
       */
     def userInfo: DataFrame = {
-      df.select(
+      val columnsV1 = Seq(
         "user.favourites_count",
         "user.followers_count",
         "user.friends_count",
@@ -74,22 +86,50 @@ package object archivesunleashed {
         "user.statuses_count",
         "user.verified"
       )
+
+      val columnsV2 = Seq(
+        "author.favourites_count",
+        "author.public_metrics.followers_count",
+        "author.public_metrics.following_count",
+        "author.id",
+        "author.location",
+        "author.name",
+        "author.username",
+        "author.public_metrics.tweet_count",
+        "author.verified"
+      )
+
+      val existingColumnsV1 = columnsV1.filter(hasColumn)
+      val existingColumnsV2 = columnsV2.filter(hasColumn)
+
+      if (existingColumnsV1.nonEmpty) {
+        df.select(existingColumnsV1.map(df.col): _*)
+      } else if (existingColumnsV2.nonEmpty) {
+        df.select(existingColumnsV2.map(df.col): _*)
+      } else {
+        df.sparkSession.emptyDataFrame
+      }
     }
 
     /** Creates a DataFrame of Tweet text.
       *
+      * Handles both v1 and v2 Twitter data by checking for the appropriate text fields.
+      *
       * @return a single column or two columns (text, and full-text) containing Tweet text.
       */
     def text: DataFrame = {
-      if (hasColumn("full_text")) {
-        df.select(
-          "full_text",
-          "text"
-        )
+      val columnsV1 = Seq("full_text", "text")
+      val columnsV2 = Seq("data.full_text", "data.text")
+
+      val existingColumnsV1 = columnsV1.filter(hasColumn)
+      val existingColumnsV2 = columnsV2.filter(hasColumn)
+
+      if (existingColumnsV1.nonEmpty) {
+        df.select(existingColumnsV1.map(df.col): _*)
+      } else if (existingColumnsV2.nonEmpty) {
+        df.select(existingColumnsV2.map(df.col): _*)
       } else {
-        df.select(
-          "text"
-        )
+        df.sparkSession.emptyDataFrame
       }
     }
 
@@ -106,13 +146,22 @@ package object archivesunleashed {
 
     /** Creates a DataFrame of Hashtags.
       *
-      * @return a single-column DataFrame containg Hashtags.
+      * Handles both v1 and v2 Twitter data by checking for hashtags in the appropriate structures.
+      *
+      * @return a single-column DataFrame containing Hashtags.
       */
     def hashtags: DataFrame = {
-      df.select(
-        explode(col("entities.hashtags.text"))
-          .as("hashtags")
-      )
+      if (isV2Data) {
+        df.select(
+          explode(col("entities.hashtags.tag"))
+            .as("hashtags")
+        )
+      } else {
+        df.select(
+          explode(col("entities.hashtags.text"))
+            .as("hashtags")
+        )
+      }
     }
 
     /** Creates a DataFrame of Urls.
@@ -153,107 +202,125 @@ package object archivesunleashed {
       */
     def sources: DataFrame = df.select("source")
 
-    /** Creates a DataFrame of Animated GIF urls.
+    /** Creates a DataFrame of animated GIF URLs.
       *
-      * @return a single-column DataFrame containing Animated GIF urls.
+      * Handles both v1 and v2 Twitter data by checking for animated GIFs in
+      * the appropriate structures.
+      *
+      * @return a single-column DataFrame containing animated GIF URLs.
       */
     def animatedGifUrls: DataFrame = {
-      df.where(
-          col("extended_entities").isNotNull
-            && col("extended_entities.media").isNotNull
-            && array_contains(
-              col("extended_entities.media.type"),
-              "animated_gif"
-            )
-        )
-        .select(
-          explode(col("extended_entities.media.media_url_https"))
-            .alias("animated_gif_url")
-        )
+      if (isV2Data) {
+        val explodedMedia = df
+          .withColumn("media_key", explode(col("attachments.media_keys")))
+          .withColumn("media", explode(col("attachments.media")))
+          .filter(col("media_key") === col("media.media_key"))
+
+        explodedMedia
+          .filter(col("media.type") === "animated_gif")
+          .select(col("media.url").alias("animated_gif_url"))
+      } else {
+        df.where(
+            col("extended_entities").isNotNull
+              && col("extended_entities.media").isNotNull
+              && array_contains(
+                col("extended_entities.media.type"),
+                "animated_gif"
+              )
+          )
+          .select(
+            explode(col("extended_entities.media.media_url_https"))
+              .alias("animated_gif_url")
+          )
+      }
     }
 
-    /** Creates a DataFrame of image urls.
+    /** Creates a DataFrame of image URLs.
       *
-      * @return a single-column DataFrame containing Animated GIF urls.
+      * Handles both v1 and v2 Twitter data by checking for the presence of media
+      * in the appropriate structures.
+      *
+      * @return a single-column DataFrame containing image URLs.
       */
     def imageUrls: DataFrame = {
-      df.where(
-          col("entities.media").isNotNull
-            && array_contains(col("extended_entities.media.type"), "photo")
-        )
-        .select(
-          explode(col("entities.media.media_url_https"))
-            .alias("image_url")
-        )
+      if (isV2Data) {
+        val explodedMedia = df
+          .withColumn("media_key", explode(col("attachments.media_keys")))
+          .withColumn("media", explode(col("attachments.media")))
+          .filter(col("media_key") === col("media.media_key"))
+
+        explodedMedia
+          .filter(col("media.type") === "photo")
+          .select(col("media.url").alias("image_url"))
+      } else {
+        df.where(
+            col("extended_entities").isNotNull
+              && col("extended_entities.media").isNotNull
+              && array_contains(col("extended_entities.media.type"), "photo")
+          )
+          .select(
+            explode(col("extended_entities.media.media_url_https"))
+              .alias("image_url")
+          )
+      }
     }
 
-    /** Creates a DataFrame of video urls.
+    /** Creates a DataFrame of video URLs.
       *
-      * @return a single-column DataFrame containing Animated GIF urls.
+      * Handles both v1 and v2 Twitter data by checking for video content in
+      * the appropriate structures.
+      *
+      * @return a single-column DataFrame containing video URLs.
       */
     def videoUrls: DataFrame = {
-      df.where(
-          col("extended_entities").isNotNull
-            && col("extended_entities.media").isNotNull
-            && col("extended_entities.media.video_info").isNotNull
-            && array_contains(col("extended_entities.media.type"), "video")
-        )
-        .select(
-          explode(col("extended_entities.media.video_info.variants"))
-            .alias("video_info")
-        )
-        .filter(col("video_info").isNotNull)
-        .select(explode(col("video_info")))
-        .withColumn("video_url", col("col.url"))
-        .drop(col("col"))
+      if (isV2Data) {
+        val explodedMedia = df
+          .withColumn("media_key", explode(col("attachments.media_keys")))
+          .withColumn("media", explode(col("attachments.media")))
+          .filter(col("media_key") === col("media.media_key"))
+
+        explodedMedia
+          .filter(col("media.type") === "video")
+          .select(col("media.url").alias("video_url"))
+      } else {
+        val videoUrlsV1 = df
+          .where(
+            col("extended_entities").isNotNull
+              && col("extended_entities.media").isNotNull
+              && col("extended_entities.media.video_info").isNotNull
+              && array_contains(col("extended_entities.media.type"), "video")
+          )
+          .select(
+            explode(col("extended_entities.media.video_info.variants"))
+              .alias("video_info")
+          )
+          .filter(col("video_info").isNotNull)
+          .select(explode(col("video_info")))
+          .withColumn("video_url", col("col.url"))
+          .drop(col("col"))
+
+        videoUrlsV1
+      }
     }
 
-    /** Creates a DataFrame of media urls.
+    /** Creates a DataFrame of media URLs (images, videos, animated GIFs).
       *
-      * @return a single-column DataFrame containing Animated GIF urls.
+      * Handles both v1 and v2 Twitter data by checking for media in
+      * the appropriate structures for GIFs, images, and videos.
+      *
+      * @return a single-column DataFrame containing media URLs.
       */
     def mediaUrls: DataFrame = {
-      val animated_gif_urls = df
-        .where(
-          col("extended_entities").isNotNull
-            && col("extended_entities.media").isNotNull
-            && array_contains(
-              col("extended_entities.media.type"),
-              "animated_gif"
-            )
-        )
-        .select(
-          explode(col("extended_entities.media.media_url_https"))
-            .alias("animated_gif_url")
-        )
+      val animatedGifUrls = this.animatedGifUrls
+        .withColumnRenamed("animated_gif_url", "media_url")
+      val imageUrls = this.imageUrls
+        .withColumnRenamed("image_url", "media_url")
+      val videoUrls = this.videoUrls
+        .withColumnRenamed("video_url", "media_url")
 
-      val image_urls = df
-        .where(
-          col("entities.media").isNotNull
-            && array_contains(col("extended_entities.media.type"), "photo")
-        )
-        .select(
-          explode(col("entities.media.media_url_https"))
-            .alias("image_url")
-        )
-
-      val video_urls = df
-        .where(
-          col("extended_entities").isNotNull
-            && col("extended_entities.media").isNotNull
-            && col("extended_entities.media.video_info").isNotNull
-            && array_contains(col("extended_entities.media.type"), "video")
-        )
-        .select(
-          explode(col("extended_entities.media.video_info.variants"))
-            .alias("video_info")
-        )
-        .filter(col("video_info").isNotNull)
-        .select(explode(col("video_info")))
-        .withColumn("video_url", col("col.url"))
-        .drop(col("col"))
-
-      image_urls.union(video_urls.union(animated_gif_urls))
+      imageUrls
+        .union(videoUrls)
+        .union(animatedGifUrls)
     }
 
     /** Creates a DataFrame that filters out sensitives tweets.
@@ -269,12 +336,53 @@ package object archivesunleashed {
       *
       * @return original DataFrame with retweets removed.
       */
-    def removeRetweets: DataFrame = df.filter(col("retweeted_status").isNull)
+    def removeRetweets: DataFrame = {
+      if (isV2Data) {
+        df.filter(col("data.referenced_tweets").isNull)
+      } else {
+        df.filter(col("retweeted_status").isNull)
+      }
+    }
 
     /** Creates a DataFrame that filters out tweets from non-verified users.
       *
       * @return original DataFrame with non-verified users' tweets removed.
       */
-    def removeNonVerified: DataFrame = df.filter(col("user.verified") === true)
+    def removeNonVerified: DataFrame = {
+      df.filter(col("user.verified") === true)
+    }
+
+    /** Extracts the most retweeted tweet IDs and their counts.
+      *
+      * Handles both Twitter v1 and v2 schemas.
+      *
+      * @return a DataFrame containing tweet IDs and their retweet counts.
+      */
+    def mostRetweeted: DataFrame = {
+      if (isV2Data) {
+        df.filter(array_contains(col("referenced_tweets.type"), "retweeted"))
+          .select(
+            explode(col("referenced_tweets")).alias("referenced"),
+            col("public_metrics.retweet_count").alias("retweet_count")
+          )
+          .filter(col("referenced.type") === "retweeted")
+          .select(
+            col("referenced.id").alias("tweet_id"),
+            col("retweet_count")
+          )
+          .groupBy("tweet_id")
+          .agg(max("retweet_count").alias("max_retweet_count"))
+          .orderBy(desc("max_retweet_count"))
+      } else {
+        df.filter(col("retweeted_status").isNotNull)
+          .select(
+            col("retweeted_status.id_str").alias("tweet_id"),
+            col("retweeted_status.retweet_count").alias("retweet_count")
+          )
+          .groupBy("tweet_id")
+          .agg(max("retweet_count").alias("max_retweet_count"))
+          .orderBy(desc("max_retweet_count"))
+      }
+    }
   }
 }

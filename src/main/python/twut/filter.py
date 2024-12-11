@@ -3,8 +3,16 @@ from pyspark.sql.functions import col
 
 
 def removeRetweets(df: DataFrame) -> DataFrame:
-    """Creates a DataFrame that filters out retweets."""
-    return df.filter(col("retweeted_status").isNull())
+    """
+    Creates a DataFrame that filters out retweets.
+
+    Handles both v1 and v2 Twitter data by checking for the appropriate field
+    indicating a retweet.
+    """
+    if isV2Data(df):
+        return df.filter(col("data.referenced_tweets").isNull())
+    else:
+        return df.filter(col("retweeted_status").isNull())
 
 
 def removeSensitive(df: DataFrame) -> DataFrame:

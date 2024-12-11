@@ -4,7 +4,7 @@
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Contribution Guidelines](http://img.shields.io/badge/CONTRIBUTING-Guidelines-blue.svg)](./CONTRIBUTING.md)
 
-An open-source toolkit for analyzing line-oriented JSON data from the Twitter v1.1 API using Apache Spark.
+An open-source toolkit for analyzing line-oriented JSON data from the Twitter v1.1 API or flattened line-oriented JSON data from the Twitter v2 API using Apache Spark.
 
 ## Dependencies
 
@@ -21,13 +21,13 @@ To get started with `twut`, you can either use it directly from Maven or downloa
 To use `twut` with Apache Spark, you can use the following command to include the package:
 
 ```
-$ spark-shell --packages "io.archivesunleashed:twut:1.0.0"
+$ spark-shell --packages "io.archivesunleashed:twut:1.1.0"
 ```
 
 Alternatively, you can download the JAR file from the [latest release](https://github.com/archivesunleashed/twut/releases) and include it manually:
 
 ```
-$ spark-shell --jars /path/to/twut-1.0.0-fatjar.jar
+$ spark-shell --jars /path/to/twut-1.1.0-fatjar.jar
 ```
 
 ### Using PySpark
@@ -35,7 +35,7 @@ $ spark-shell --jars /path/to/twut-1.0.0-fatjar.jar
 For Python users, download the ZIP file from the [latest release](https://github.com/archivesunleashed/twut/releases) and include it in your PySpark environment:
 
 ```
-$ pyspark --py-files /path/to/twut-1.0.0.zip
+$ pyspark --py-files /path/to/twut-1.1.0.zip
 ```
 
 You will also need to set the `PYSPARK_PYTHON` and `PYSPARK_DRIVER_PYTHON` environment variables.
